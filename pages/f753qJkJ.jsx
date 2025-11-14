@@ -25,6 +25,7 @@ import { CreateEventModal } from '../components/CreateEventModal.jsx';
 import { CreateAdminModal } from '../components/CreateAdminModal.jsx';
 import { NotificationMenu } from '../components/NotificationMenu.jsx';
 import { PaginationControls } from '../components/PaginationControls.jsx';
+import { useInactivityTimer, InactivityWarning } from '../hooks/useInactivityTimer.jsx';
 
 export default function AdminDashboard({ user }) {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -55,32 +56,26 @@ export default function AdminDashboard({ user }) {
   const { mutate: updateStatus, isLoading, isError, error } = useMutation({
     mutationFn: async (status) => {
       if (!user?.id) throw new Error('User ID non disponible');
-      
-      console.log('Envoi de la requête PATCH avec status:', status);
-      
+      // console.log('Envoi de la requête PATCH avec status:', status);
       const response = await fetch(`/api/admins/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ admin_status: String(status) })
       });
-      
       if (!response.ok) {
         const errorData = await response.text();
-        console.error('Erreur response:', errorData);
+        // console.error('Erreur response:', errorData);
         throw new Error('Erreur de status');
       }
-      
       const data = await response.json();
       // console.log('Réponse reçue:', data);
       return data;
     },
     onSuccess: (data) => {
       // console.log('Mutation réussie:', data);
-      // Invalider les queries pour rafraîchir les données
-      queryClient.invalidateQueries(['admin', user?.id]);
     },
     onError: (error) => {
-      console.error('Erreur lors de la mutation:', error);
+      // console.error('Erreur lors de la mutation:', error);
     }
   });
   
@@ -89,6 +84,22 @@ export default function AdminDashboard({ user }) {
       updateStatus('online');
     }
   }, [user?.id]);
+
+  const { 
+    showWarning, 
+    timeRemaining, 
+    formattedTime, 
+    resetTimer 
+  } = useInactivityTimer({
+    inactivityTimeout: 15 * 60 * 1000, // 15 minutes 15 * 60 * 1000
+    warningTime: (2 * 60 * 1000) - 22000, // 1 minute 1 * 60 * 1000,
+    onLogout: async () => {
+      updateStatus('offline');
+      signOut();
+      router.push("/");
+    }
+  });
+
 
   const { data: userData, isLoadingProfil } = useQuery({
     queryKey: ['admin', user?.id],
@@ -314,6 +325,19 @@ export default function AdminDashboard({ user }) {
               <h3 className="text-2xl font-semibold text-gray-800">{menuItems.find(item => item.id === activeTab)?.label}</h3>
               <p className="text-sm text-gray-500 mt-1">Gérez votre plateforme d'événements</p>
             </div>
+            {showWarning && (
+              <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                <p className="text-sm text-yellow-700">
+                  ⚠️ Déconnexion pour inactivité dans {formattedTime}
+                </p>
+              </div>
+            )}
+            {/* <InactivityWarning 
+              timeRemaining={timeRemaining}
+              formattedTime={formattedTime}
+              onStayActive={resetTimer}
+            /> */}
+
             <div className="flex items-center gap-4">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

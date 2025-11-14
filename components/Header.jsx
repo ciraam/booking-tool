@@ -32,7 +32,7 @@ export const Header = ({ user, userData, isDisconnect, isOnline }) => {
 
   const isActive = (path) => pathname === path;
 
-  if(user.role === "admin") router.push("/f753qJkJ");
+  if(user?.role === "admin") router.push("/f753qJkJ");
 
   return (
     <header className="sticky top-0 z-50 glass border-b">

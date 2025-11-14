@@ -3,15 +3,14 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
-  "/f753qJkJ": "pages/f753qJkJ.js",
   "/Zvx4T7e6": "pages/Zvx4T7e6.js",
+  "/api/admins/[id]": "pages/api/admins/[id].js",
+  "/f753qJkJ": "pages/f753qJkJ.js",
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
   "/api/events": "pages/api/events.js",
   "/api/admins": "pages/api/admins.js",
-  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
-  "/api/admins/[id]": "pages/api/admins/[id].js",
-  "/api/users": "pages/api/users.js",
   "/api/bookings/getAllBookings": "pages/api/bookings/getAllBookings.js",
+  "/api/users": "pages/api/users.js",
   "/api/logs": "pages/api/logs.js",
-  "/api/notifications/admin/[id]": "pages/api/notifications/admin/[id].js",
-  "/api/users/[id]": "pages/api/users/[id].js"
+  "/api/notifications/admin/[id]": "pages/api/notifications/admin/[id].js"
 }
