@@ -33,7 +33,7 @@ npm install
 
 4. **Configurer Prisma :**
     Si nom de bd autre que `bookify`, modifiez le fichier `.env` à la racine :
-> Le fichier `.env` a été laissé volontairement à la racine pour le bon fonctionnement du projet, il ne sera évidemment pas le même en prod
+> Le fichier `.env` a été laissé volontairement à la racine pour le bon fonctionnement du projet, il ne sera évidemment pas le même en prod.
 
 ```env
 DATABASE_URL="mysql://root:@localhost:3306/bookify"
@@ -47,6 +47,8 @@ DATABASE_URL="mysql://root:@localhost:3306/bookify"
 npx prisma migrate dev --name init
 npx prisma generate
 ```
+> Dans le dossier `sql` le fichier sql/`bookify_data.sql` est disponible avec les données, trigger, événement, etc (dans le cas où votre bd s'appelle `bookify` sinon modifier le nom dans le fichier `bookify_data.sql`)
+
 6. **Lancer le serveur en mode développement :**
 
 ```bash
