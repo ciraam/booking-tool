@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  event_id        Int      @id @default(autoincrement())
+  event_name      String
+  event_description     String
+  event_price     Int
+  event_image      String
+  event_category      String
+  event_location      String
+  event_address      String
+  event_organizer      String
+  event_date      DateTime
+  event_time      String
+  event_seats_start    Int
+  event_seats     Int
+  event_status    String @default("sketch")
+  event_created DateTime @default(now())
+
+  bookings Booking[]
+}
+
+model Ticket {
+  ticket_id        Int      @id @default(autoincrement())
+  ticket_event_id      Int
+  ticket_name     String
+  ticket_description     String
+  ticket_price      Int
+  ticket_available     Int
+  ticket_created DateTime @default(now())
+}
+
+model Booking {
+  booking_id        String @id      
+  booking_event_id      Int
+  booking_user_id      Int?
+  booking_user_firstname     String
+  booking_user_lastname      String
+  booking_user_email      String
+  booking_user_phone      String
+  booking_price      Int
+  booking_quantity      Int
+  booking_status     String @default("upcoming")
+  booking_created DateTime @default(now())
+
+  event Event @relation(fields: [booking_event_id], references: [event_id])
+}
+
+model User {
+  user_id        Int      @id @default(autoincrement())
+  user_firstname      String
+  user_lastname      String
+  user_pseudo      String @unique
+  user_email     String @unique
+  user_phone     String @unique
+  user_password   String
+  user_image     String
+  user_isActived     String @default("no")
+  user_role      String @default("user")
+  user_status    String @default("offline")
+  user_created DateTime @default(now())
+}
+
+model Admin {
+  admin_id        Int      @id @default(autoincrement())
+  admin_firstname     String
+  admin_lastname     String
+  admin_pseudo     String @unique
+  admin_email     String @unique
+  admin_password     String
+  admin_image      String
+  admin_role       String @default("admin")
+  admin_type       String
+  admin_status     String @default("offline")
+  admin_created DateTime @default(now())
+
+  notifications NotificationAdmin[]
+}
+
+model Organization {
+  organization_id        Int      @id @default(autoincrement())
+  organization_user_id      Int
+  organization_name      String
+  organization_description     String
+  organization_category     String
+  organization_image       String
+  organization_created DateTime @default(now())
+}
+
+model NotificationAdmin {
+  notification_id        Int      @id @default(autoincrement())
+  notification_admin_id   Int
+  notification_type      String   
+  notification_title     String
+  notification_message   String
+  notification_read      String  @default("no")
+  notification_created DateTime @default(now())
+  
+  admin Admin @relation(fields: [notification_admin_id], references: [admin_id])
+}
+
+model Logs {
+  logs_id        Int      @id @default(autoincrement())
+  logs_description        String
+  logs_admin_id          Int
+  logs_admin_firstname     String
+  logs_admin_lastname     String
+  logs_admin_pseudo     String @unique
+  logs_admin_email     String @unique
+  logs_admin_image      String
+  logs_admin_type       String
+  logs_created DateTime @default(now())
+}
