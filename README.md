@@ -45,8 +45,8 @@ DATABASE_URL="mysql://root:@localhost:3306/bookify"
 
 ```bash
 npx prisma migrate dev --name init
+npx prisma generate
 ```
-
 6. **Lancer le serveur en mode développement :**
 
 ```bash
