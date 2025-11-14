@@ -52,29 +52,44 @@ export default function AdminDashboard({ user }) {
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [logsLoading, setLogsLoading] = useState(false);
 
-  const { mutate: updateStatus, isLoading } = useMutation(
-    async (status) => {
+  const { mutate: updateStatus, isLoading, isError, error } = useMutation({
+    mutationFn: async (status) => {
       if (!user?.id) throw new Error('User ID non disponible');
-      const response = await fetch(`/api/admins/${user?.id}`, {
+      
+      console.log('Envoi de la requête PATCH avec status:', status);
+      
+      const response = await fetch(`/api/admins/${user.id}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ admin_status: String(status) })
       });
-      if (!response.ok) throw new Error('Erreur de status');
-      console.log(response);
-      return response.json();
+      
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('Erreur response:', errorData);
+        throw new Error('Erreur de status');
+      }
+      
+      const data = await response.json();
+      // console.log('Réponse reçue:', data);
+      return data;
     },
-  );
+    onSuccess: (data) => {
+      // console.log('Mutation réussie:', data);
+      // Invalider les queries pour rafraîchir les données
+      queryClient.invalidateQueries(['admin', user?.id]);
+    },
+    onError: (error) => {
+      console.error('Erreur lors de la mutation:', error);
+    }
+  });
   
   useEffect(() => {
     if (user?.id) {
-      console.log('update status');
       updateStatus('online');
-    } else {
-      console.log('user indisponible');
     }
   }, [user?.id]);
-  
+
   const { data: userData, isLoadingProfil } = useQuery({
     queryKey: ['admin', user?.id],
     queryFn: async () => {
@@ -89,6 +104,7 @@ export default function AdminDashboard({ user }) {
   const formatUserData = userData? userData : ' ';
 
   const handleDeconnection = () => {
+    updateStatus('offline');
     signOut();
     router.push("/Zvx4T7e6");
   };

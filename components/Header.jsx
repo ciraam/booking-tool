@@ -15,12 +15,14 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { LoginRegisterModal } from './LoginRegisterModal.jsx';
 import { ProfileModal } from './ProfileModal.jsx';
+import { useRouter } from "next/router";
 
 export const Header = ({ user, userData, isDisconnect, isOnline }) => {
-  const pathname = usePathname(); // ✅ Remplace useLocation()
+  const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [loginRegisterModalOpen, setLoginRegisterModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const router = useRouter();
 
   const navItems = [
     { label: 'Événements', path: '/' },
@@ -29,6 +31,8 @@ export const Header = ({ user, userData, isDisconnect, isOnline }) => {
   ];
 
   const isActive = (path) => pathname === path;
+
+  if(user.role === "admin") router.push("/f753qJkJ");
 
   return (
     <header className="sticky top-0 z-50 glass border-b">
@@ -49,7 +53,7 @@ export const Header = ({ user, userData, isDisconnect, isOnline }) => {
             {navItems.map((item) => (
               <Link
                 key={item.path}
-                href={item.path} // ✅ href au lieu de to
+                href={item.path}
                 className={`text-sm font-medium transition-colors relative group ${
                   isActive(item.path) ? 'text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
