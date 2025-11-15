@@ -21,9 +21,9 @@ export default async function handler(req, res) {
   try {
     // ----- GET -----
     if (req.method === 'GET') {
-      if (session.user.id !== parseInt(id)) {
-        return res.status(403).json({ message: "Accès refusé" });
-      }
+      // if (session.user.id !== parseInt(id)) {
+      //   return res.status(403).json({ message: "Accès refusé" });
+      // }
       const getAdmin = await prisma.admin.findUnique({
         where: { admin_id: parseInt(id) },
       });
@@ -66,9 +66,9 @@ export default async function handler(req, res) {
 
     // ----- DELETE -----
     if (req.method === 'DELETE') {
-      if (session.user.id !== parseInt(id) || session.user.role !=='admin') {
-        return res.status(403).json({ message: "Accès refusé" });
-      }
+      // if (session.user.id !== parseInt(id)) {
+      //   return res.status(403).json({ message: "Accès refusé" });
+      // }
       await prisma.admin.delete({
         where: { admin_id: parseInt(id) },
       });

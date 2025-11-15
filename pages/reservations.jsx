@@ -161,26 +161,6 @@ export default function Reservations({ user, isDisconnect }) {
     setSelectedBookingId(null);
   };
 
-  // useEffect(() => {
-  //   const checkConnection = async () => {
-  //     try {
-  //       // Ping vers ton API ou Google
-  //       const response = await fetch('/api/events', {
-  //         method: 'HEAD',
-  //         cache: 'no-cache',
-  //       });
-  //       setIsOnline(response.ok);
-  //     } catch (error) {
-  //       setIsOnline(false);
-  //     }
-  //   };
-  //   // Vérifie toutes les 10 secondes
-  //   const interval = setInterval(checkConnection, 10000);
-  //   // checkConnection();
-
-  //   return () => clearInterval(interval);
-  // }, []);
-
   const BookingCard = ({ booking, index }) => {
     const bookingD = isDisconnect? bookingData : booking;
     const statusColors = {

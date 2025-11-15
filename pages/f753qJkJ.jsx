@@ -52,6 +52,8 @@ export default function AdminDashboard({ user }) {
   const [adminsLoading, setAdminsLoading] = useState(false);
   const [notificationsLoading, setNotificationsLoading] = useState(false);
   const [logsLoading, setLogsLoading] = useState(false);
+  const [isModalCreateAdmin, setIsModalCreateAdmin] = useState(true);
+  const [admin_idModal, setAdmin_idModal] = useState(0);
 
   const { mutate: updateStatus, isLoading, isError, error } = useMutation({
     mutationFn: async (status) => {
@@ -200,10 +202,10 @@ export default function AdminDashboard({ user }) {
     { id: 'overview', label: 'Vue d\'ensemble', icon: Home },
     { id: 'events', label: 'Événements', icon: CalendarCog },
     { id: 'bookings', label: 'Réservations', icon: Pin },
-    { id: 'users', label: 'Utilisateurs', icon: Users },
-    ...(user?.id === 1 ? [{ id: 'admins', label: 'Administrateurs', icon: UserRoundCog }] : []),
+    ...(userData?.admin_type !== "Modérateur" ? [{ id: 'users', label: 'Utilisateurs', icon: Users }] : []),
+    ...(userData?.admin_type === "Super Admin" ? [{ id: 'admins', label: 'Administrateurs', icon: UserRoundCog }] : []),
     { id: 'analytics', label: 'Statistiques', icon: BarChart3 },
-    ...(user?.id === 1 ? [{ id: 'reports', label: 'Logs d\'activité', icon: FileText }] : []),
+    ...(userData?.admin_type === "Super Admin" ? [{ id: 'reports', label: 'Logs d\'activité', icon: FileText }] : []),
     // { id: 'settings', label: 'Paramètres', icon: Settings },
   ];
 
@@ -276,6 +278,54 @@ export default function AdminDashboard({ user }) {
 
   const clearAll = () => {
     setNotifications([]);
+  };
+
+  const handleNewAdmin = () => {
+    setIsModalCreateAdmin(true);
+    setCreateAdminModalOpen(true);
+  };
+
+  const handleShowEvent = (event_id, user, userData) => {
+
+  };
+
+  const handleModifyEvent = (event_id, user, userData) => {
+
+  };
+
+  const handleRemoveEvent = (event_id) => {
+
+  };
+
+  const handleRemoveBooking = (booking_id) => {
+    
+  };
+
+  const handleShowUser = (user_id, user, userData) => {
+
+  };
+
+  const handleModifyUser = (user_id, user, userData) => {
+
+  };
+
+  const handleRemoveUser = (user_id) => {
+
+  };
+
+  const handleModifyAdmin = (admin_id) => {
+    setAdmin_idModal(admin_id);
+    setIsModalCreateAdmin(false);
+    setCreateAdminModalOpen(true);
+  };
+
+  const handleRemoveAdmin = async (admin_id) => {
+    const response = await fetch(`/api/admins/${admin_id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Erreur de suppression');
+      await response.json();
+      fetchAdmins();
   };
 
   return (
@@ -718,7 +768,7 @@ export default function AdminDashboard({ user }) {
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Montant</th>
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                          {user.id === 1 && <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>}
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-gray-200">
@@ -740,11 +790,11 @@ export default function AdminDashboard({ user }) {
                                 {getStatusText(booking.booking_status)}
                               </span>
                             </td>
-                            <td className="px-6 py-4">
-                              <button className="p-2 hover:bg-gray-100 rounded-lg transition">
-                                <MoreVertical size={18} />
+                            {user.id === 1 && <td className="px-6 py-4">
+                              <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                                <Trash2 size={18} />
                               </button>
-                            </td>
+                            </td>}
                           </tr>
                         ))}
                       </tbody>
@@ -799,10 +849,10 @@ export default function AdminDashboard({ user }) {
                     <Filter size={20} />
                     Filtres
                   </Button>
-                  <Button className="gap-2">
+                  {userData.admin_type !== "Modérateur" && (<Button className="gap-2">
                     <Users size={20} />
                     Nouvel utilisateur
-                  </Button>
+                  </Button>)}
                 </div>
               </div>
 
@@ -837,9 +887,9 @@ export default function AdminDashboard({ user }) {
                             </span>
                           </div>
                         </div>
-                        <button className="p-2 hover:bg-gray-100 rounded-lg transition">
+                        {/* <button className="p-2 hover:bg-gray-100 rounded-lg transition">
                           <MoreVertical size={18} />
-                        </button>
+                        </button> */}
                       </div>
                       <div className="space-y-2 mb-4">
                         <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -860,7 +910,7 @@ export default function AdminDashboard({ user }) {
                           <p className="text-xs text-gray-500">Réservations</p>
                           <p className="text-lg font-semibold text-gray-800">{user.bookings}</p>
                         </div>
-                        <div className="flex gap-2">
+                        {userData.admin_type !== "Modérateur" && (<div className="flex gap-2">
                           <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
                             <Eye size={18} />
                           </button>
@@ -870,7 +920,7 @@ export default function AdminDashboard({ user }) {
                           <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                             <Trash2 size={18} />
                           </button>
-                        </div>
+                        </div>)}
                       </div>
                     </div>
                   ))}
@@ -1021,7 +1071,7 @@ export default function AdminDashboard({ user }) {
                       <List size={20} />
                     </Button>
                   </div>
-                  <Button onClick={() => setCreateAdminModalOpen(true)} className="gap-2">
+                  <Button onClick={handleNewAdmin} className="gap-2">
                     <UserRoundCog size={20} />
                     Ajouter un administrateur
                   </Button>
@@ -1080,14 +1130,18 @@ export default function AdminDashboard({ user }) {
                           </span>
                         </div>
                         <div className="flex gap-2">
-                          <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
-                            <Edit size={18} />
-                          </button>
-                          {admin.admin_id !== 1 && (
-                            <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                          {userData.admin_type === "Super Admin" && (
+                            <button onClick={() => handleModifyAdmin(admin.admin_id)} className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
+                              <Edit size={18} />
+                            </button>
+                          )}
+
+                          {admin.admin_id !== 1 && ( 
+                            <button onClick={() => handleRemoveAdmin(admin.admin_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                               <Trash2 size={18} />
                             </button>
                           )}
+                          
                         </div>
                       </div>
                     </div>
@@ -1146,11 +1200,13 @@ export default function AdminDashboard({ user }) {
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex gap-2">
-                                <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
+                                {userData.admin_type === "Super Admin" && (
+                                <button onClick={() => handleModifyAdmin(admin.admin_id)} className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
                                   <Edit size={18} />
                                 </button>
+                                )}
                                 {admin.admin_id !== 1 && (
-                                  <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                                  <button onClick={() => handleRemoveAdmin(admin.admin_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                                     <Trash2 size={18} />
                                   </button>
                                 )}
@@ -1525,7 +1581,7 @@ export default function AdminDashboard({ user }) {
       <CreateEventModal open={createEventModalOpen} onClose={() => setCreateEventModalOpen(false)} />
 
       {/* Create Admin Modal */}
-      {user?.id === 1 && (<CreateAdminModal open={createAdminModalOpen} onClose={() => setCreateAdminModalOpen(false)} />)}
+      {user?.id === 1 && (<CreateAdminModal open={createAdminModalOpen} onClose={() => setCreateAdminModalOpen(false)} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />)}
 
       <ProfileModal open={profileModalOpen} onClose={() => setProfileModalOpen(false)} user={user} userData={formatUserData} />
     </div>

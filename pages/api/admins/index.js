@@ -38,6 +38,7 @@ export default async function handler(req, res) {
           admin_password: await bcrypt.hash(body.password, 10),
           admin_phone: body.phone,
           admin_image: body.image,
+          admin_type: body.type,
         },
       });
 
