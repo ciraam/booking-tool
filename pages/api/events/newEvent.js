@@ -32,6 +32,7 @@ export default async function handler(req, res) {
           event_address: body.address,
           event_image: body.image,
           event_seats: body.seats,
+          event_seats_start: body.seats,
           event_price: body.price,
           // tickets: {
           //   create: body.tickets || [],

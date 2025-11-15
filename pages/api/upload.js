@@ -20,8 +20,8 @@ export default async function handler(req, res) {
   if (!session) {
     return res.status(401).json({ message: 'Non authentifié' });
   }
-
-  const uploadDir = path.join(process.cwd(), 'public', 'profiles');
+  const { pathCateg } = req.query;
+  const uploadDir = path.join(process.cwd(), 'public', pathCateg);
 
   const form = new IncomingForm({
     uploadDir,
@@ -30,11 +30,11 @@ export default async function handler(req, res) {
     maxFiles: 1, // ✅ Un seul fichier
     filename: (name, ext, part) => {
       // ✅ Nom du fichier : user-{userId}-{timestamp}.ext
-      return `user-${session.user.id}-${Date.now()}${ext}`;
+      return `${pathCateg}-${session.user.role}-${session.user.id}-${Date.now()}${ext}`;
     },
   });
 
-  // ✅ Crée le dossier profiles s'il n'existe pas
+  // ✅ Crée le dossier s'il n'existe pas
   try {
     await fs.mkdir(uploadDir, { recursive: true });
   } catch (err) {
@@ -78,7 +78,7 @@ export default async function handler(req, res) {
     try {
       const oldImages = await fs.readdir(uploadDir);
       const userOldImages = oldImages.filter(img => 
-        img.startsWith(`user-${session.user.id}-`) && 
+        img.startsWith(`${session.user.role}-${session.user.id}-`) && 
         img !== path.basename(file.filepath)
       );
       
@@ -90,7 +90,7 @@ export default async function handler(req, res) {
     }
 
     // ✅ URL publique de l'image
-    const fileUrl = `/profiles/${path.basename(file.filepath)}`;
+    const fileUrl = `${path.basename(file.filepath)}`;
     
     return res.status(200).json({ 
       fileUrl,

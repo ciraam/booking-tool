@@ -58,7 +58,9 @@ export default function AdminDashboard({ user }) {
   const [admin_idModal, setAdmin_idModal] = useState(0);
   const [isModalCreateUser, setIsModalCreateUser] = useState(true);
   const [user_idModal, setUser_idModal] = useState(0);
-
+  const [isModalCreateEvent, setIsModalCreateEvent] = useState(true);
+  const [event_idModal, setEvent_idModal] = useState(0);
+  
   const { mutate: updateStatus, isLoading, isError, error } = useMutation({
     mutationFn: async (status) => {
       if (!user?.id) throw new Error('User ID non disponible');
@@ -284,6 +286,11 @@ export default function AdminDashboard({ user }) {
     setNotifications([]);
   };
 
+  const handleNewEvent = () => {
+    setIsModalCreateEvent(true);
+    setCreateEventModalOpen(true);
+  };
+
   const handleNewAdmin = () => {
     setIsModalCreateAdmin(true);
     setCreateAdminModalOpen(true);
@@ -294,12 +301,14 @@ export default function AdminDashboard({ user }) {
     setCreateUserModalOpen(true);
   };
 
-  const handleShowEvent = (event_id) => {
-
+  const handleToggleStatusEvent = (event_id) => {
+    
   };
 
   const handleModifyEvent = (event_id) => {
-
+    setEvent_idModal(event_id);
+    setIsModalCreateEvent(false);
+    setCreateEventModalOpen(true);
   };
 
   const handleRemoveEvent = async (event_id) => {
@@ -324,7 +333,6 @@ export default function AdminDashboard({ user }) {
     setUser_idModal(user_id);
     setIsModalCreateUser(false);
     setCreateUserModalOpen(true);
-    console.log(user_id)
   };
 
   const handleRemoveUser = async (user_id) => {
@@ -447,7 +455,7 @@ export default function AdminDashboard({ user }) {
                        <p className="text-xs text-gray-500">{user?.email}</p>
                      </div>
                      <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold shadow-sm">
-                       {<img src={userData?.admin_image} alt={`Image du profil de ${userData?.admin_firstname}`} className="w-full h-full rounded-full object-cover"/> || userData?.admin_firstname?.[0]?.toUpperCase()}
+                       {<img src={`/profiles/${userData?.admin_image}`} alt={`Image du profil de ${userData?.admin_firstname}`} className="w-full h-full rounded-full object-cover"/> || userData?.admin_firstname?.[0]?.toUpperCase()}
                      </div>
                    </div>
                  </Button>            
@@ -608,7 +616,7 @@ export default function AdminDashboard({ user }) {
                     <Filter size={20} />
                     Filtres
                   </Button>
-                  <Button onClick={() => setCreateEventModalOpen(true)} className="gap-2">
+                  <Button onClick={handleNewEvent} className="gap-2">
                     <CalendarCog size={20} />
                     Nouvel événement
                   </Button>
@@ -636,7 +644,7 @@ export default function AdminDashboard({ user }) {
                           <button className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
                             <Eye size={20} />
                           </button>
-                          <button className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
+                          <button onClick={() => handleModifyEvent(event.event_id)} className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
                             <Edit size={20} />
                           </button>
                           <button onClick={() => handleRemoveEvent(event.event_id)} className="p-2 bg-white rounded-lg hover:bg-gray-100 transition text-red-600">
@@ -722,7 +730,7 @@ export default function AdminDashboard({ user }) {
                                 <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
                                   <Eye size={18} />
                                 </button>
-                                <button className="p-2 hover:bg-gray-100 rounded-lg transition">
+                                <button onClick={() => handleModifyEvent(event.event_id)} className="p-2 hover:bg-gray-100 rounded-lg transition">
                                   <Edit size={18} />
                                 </button>
                                 <button onClick={() => handleRemoveEvent(event.event_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
@@ -972,7 +980,7 @@ export default function AdminDashboard({ user }) {
                                 <div className="relative w-12 h-12 rounded-full overflow-hidden">
                                   {user.user_image ? (
                                     <img
-                                      src={user.user_image}
+                                      src={`/profiles/${user.user_image}`}
                                       alt="Image de profil"
                                       className="w-full h-full object-cover"
                                     />
@@ -1115,7 +1123,7 @@ export default function AdminDashboard({ user }) {
                           <div className="relative w-12 h-12 rounded-full overflow-hidden">
                             {admin.admin_image ? (
                               <img
-                                src={admin.admin_image}
+                                src={`/profiles/${admin.admin_image}`}
                                 alt="Image de profil"
                                 className="w-full h-full object-cover"
                               />
@@ -1193,7 +1201,7 @@ export default function AdminDashboard({ user }) {
                                 <div className="relative w-12 h-12 rounded-full overflow-hidden">
                                   {admin.admin_image ? (
                                     <img
-                                      src={admin.admin_image}
+                                      src={`/profiles/${admin.admin_image}`}
                                       alt="Image de profil"
                                       className="w-full h-full object-cover"
                                     />
@@ -1599,15 +1607,15 @@ export default function AdminDashboard({ user }) {
           )} */}
         </div>
       </main>
-
+      
       {/* Create Event Modal */}
-      <CreateEventModal open={createEventModalOpen} onClose={() => setCreateEventModalOpen(false)} />
+      <CreateEventModal open={createEventModalOpen} onClose={() => {setCreateEventModalOpen(false); setEvent_idModal(0)}} isCreate={isModalCreateEvent} event_id={event_idModal} userData={userData} />
 
       {/* Create Admin Modal */}
-      <CreateAdminModal open={createAdminModalOpen} onClose={() => setCreateAdminModalOpen(false)} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />
+      <CreateAdminModal open={createAdminModalOpen} onClose={() => {setCreateAdminModalOpen(false); setAdmin_idModal(0)}} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />
 
       {/* Create User Modal */}
-      <CreateUserModal open={createUserModalOpen} onClose={() => setCreateUserModalOpen(false)} isCreate={isModalCreateUser} user_id={user_idModal} userData={userData} />
+      <CreateUserModal open={createUserModalOpen} onClose={() => {setCreateUserModalOpen(false); setUser_idModal(0)}} isCreate={isModalCreateUser} user_id={user_idModal} userData={userData} />
 
       <ProfileModal open={profileModalOpen} onClose={() => setProfileModalOpen(false)} user={user} userData={formatUserData} />
     </div>

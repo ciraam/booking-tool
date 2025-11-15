@@ -186,17 +186,14 @@ export function ProfileModal({ open, onClose, user, userData }) {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  // ✅ Déclenche le clic sur l'input file
   const handleCameraClick = () => {
     fileInputRef.current?.click();
   };
 
-  // Fonction upload d'image (dans ProfileModal)
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // ✅ Vérifie le type de fichier côté client
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
     if (!allowedTypes.includes(file.type)) {
       toast({
@@ -207,7 +204,6 @@ export function ProfileModal({ open, onClose, user, userData }) {
       return;
     }
 
-    // ✅ Vérifie la taille (2MB max)
     const maxSize = 2 * 1024 * 1024; // 2MB
     if (file.size > maxSize) {
       toast({
@@ -218,17 +214,15 @@ export function ProfileModal({ open, onClose, user, userData }) {
       return;
     }
 
-    // ✅ Crée un aperçu local immédiatement
     const previewUrl = URL.createObjectURL(file);
     setPreview(previewUrl);
     setSaving(prev => ({ ...prev, image: true }));
 
     try {
-      // ✅ Envoie le fichier
       const formDataUpload = new FormData();
       formDataUpload.append("file", file);
 
-      const resUpload = await fetch(`/api/upload`, {
+      const resUpload = await fetch(`/api/upload?pathCateg=profiles`, {
         method: 'POST',
         body: formDataUpload,
       });
@@ -241,7 +235,6 @@ export function ProfileModal({ open, onClose, user, userData }) {
       const data = await resUpload.json();
       const imageUrl = data.fileUrl; // Ex: /profiles/user-123-1234567890.jpg
 
-      // ✅ Met à jour en BDD
       const fieldBdImage = `${user?.role}_image`;
       const resUpdate = await fetch(`/api/${user?.role}s/${user.id}`, {
         method: 'PATCH',
@@ -251,7 +244,6 @@ export function ProfileModal({ open, onClose, user, userData }) {
 
       if (!resUpdate.ok) throw new Error('Erreur mise à jour BDD');
 
-      // ✅ Met à jour le state local
       setFormData(prev => ({ ...prev, image: imageUrl }));
       setPreview(imageUrl);
 
@@ -272,7 +264,6 @@ export function ProfileModal({ open, onClose, user, userData }) {
         description: err.message || "Une erreur est survenue",
         variant: 'destructive',
       });
-      // ✅ Restaure l'ancienne image
       setPreview(user.image || null);
     } finally {
       setSaving(prev => ({ ...prev, image: false }));
@@ -297,7 +288,7 @@ export function ProfileModal({ open, onClose, user, userData }) {
             <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-green-600 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg overflow-hidden">
               {preview ? (
                 <img
-                  src={preview}
+                  src={`/profiles/${preview}`}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />

@@ -17,6 +17,20 @@ export default async function handler(req, res) {
   }
 
   try {
+    // ----- GET -----
+    if (req.method === 'GET') {
+      const event = await prisma.event.findUnique({
+        where: { event_id: parseInt(id) },
+        // include: { tickets: true },
+      });
+
+      if (!event) {
+        return res.status(404).json({ message: 'Événement introuvable' });
+      }
+
+      return res.status(200).json(event);
+    }
+    
     // ----- PUT -----
     if (req.method === 'PUT') {
       const body = req.body;
@@ -37,6 +51,17 @@ export default async function handler(req, res) {
           event_price: body.price,
         },
         // include: { tickets: true },
+      });
+
+      return res.status(200).json(updatedEvent);
+    }
+
+    // PATCH - Mise à jour partielle
+    if (req.method === "PATCH") {
+      const dataToUpdate = { ...req.body };
+      const updatedEvent = await prisma.event.update({
+        where: { event_id: parseInt(id) },
+        data: dataToUpdate
       });
 
       return res.status(200).json(updatedEvent);

@@ -74,38 +74,38 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
     setLoading(true);
 
     if (formData.firstname === '' || formData.lastname === ''|| formData.email === '' || formData.phone === '' || password === '') {
-          toast({
-            title: 'Informations incomplètes',
-            description: 'Veuillez remplir tous les champs',
-            variant: 'destructive',
-          });
-          return;
-        }
-        if(!phoneValidation(formData.phone)) {
-          toast({
-            title: 'Numéro de téléphone invalide',
-            description: 'Veuillez renseigner un numéro de téléphone valide',
-            variant: 'destructive',
-          });
-          return;
-        }
-        fetchVerifPhone();
-        if(verifPhone.length >= 1) {
-          toast({
-            title: 'Numéro de téléphone déjà enregistré',
-            description: 'Veuillez renseigner un numéro de téléphone non utilisé',
-            variant: 'destructive',
-          });
-          return;
-        }
-        fetchVerifEmail();
-        if(verifEmail.length >= 1) {
-          toast({
-            title: 'Email déjà enregistré',
-            description: 'Veuillez renseigner un email non utilisé',
-            variant: 'destructive',
-          });
-          return;
+      toast({
+        title: 'Informations incomplètes',
+        description: 'Veuillez remplir tous les champs',
+        variant: 'destructive',
+      });
+      return;
+    }
+    if(!phoneValidation(formData.phone)) {
+      toast({
+        title: 'Numéro de téléphone invalide',
+        description: 'Veuillez renseigner un numéro de téléphone valide',
+        variant: 'destructive',
+      });
+      return;
+    }
+    fetchVerifPhone();
+    if(verifPhone.length >= 1) {
+      toast({
+        title: 'Numéro de téléphone déjà enregistré',
+        description: 'Veuillez renseigner un numéro de téléphone non utilisé',
+        variant: 'destructive',
+      });
+      return;
+    }
+    fetchVerifEmail();
+    if(verifEmail.length >= 1) {
+      toast({
+        title: 'Email déjà enregistré',
+        description: 'Veuillez renseigner un email non utilisé',
+        variant: 'destructive',
+      });
+      return;
     }
 
     try {
@@ -115,9 +115,6 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
         body: JSON.stringify(formData)
       });
       if (!response.ok) throw new Error('Erreur création');
-      // console.log('Création admin:', formData);
-      // Simule un délai
-      // await new Promise(resolve => setTimeout(resolve, 1000));
       onClose();
     } catch (error) {
       console.error('Erreur:', error);
@@ -138,6 +135,7 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
       const data = await res.json();
       return data;
     },
+    refetchInterval: 5000,
     enabled: user_id !== 0,
   });
 
@@ -158,9 +156,7 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
         email: uData.user_email || ''
       });
       setShowModal(true);
-      console.log('oui')
     }
-    console.log('nop')
   }, [uData, saved]);
 
   // Critères de validation
@@ -207,7 +203,7 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
       });
       return;
     }
-    // Ne sauvegarde que si la valeur a changé
+
     if (value === formDataOrigin[field]) return;
 
     if (value === 'type') console.log(formData.type);
@@ -250,6 +246,22 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCloseModal = () => {
+    setFormData({
+      firstname: '',
+      lastname: '',
+      phone: '',
+      email: ''
+    });
+    setFormDataOrigin({
+      firstname: '',
+      lastname: '',
+      phone: '',
+      image: ''
+    });
+    onClose();
   };
 
   if (isCreate) {
@@ -387,7 +399,7 @@ export function CreateUserModal({ open, onClose, isCreate, user_id, userData }) 
   } else {
     return (
       showModal && (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleCloseModal}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">

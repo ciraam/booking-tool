@@ -38,7 +38,7 @@ export default function AdminLogin() {
       toast({
         title: 'Connexion réussie !',
         description: 'Redirection en cours...',
-        variant: 'bg-green-500 text-white',
+        className: 'bg-green-500 text-white',
       });
       router.push("/f753qJkJ");
     }

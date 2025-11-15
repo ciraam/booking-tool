@@ -85,7 +85,7 @@ export const Header = ({ user, userData, isDisconnect, isOnline }) => {
                       <p className="text-xs text-gray-500">{user?.email}</p>
                     </div>
                     <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-semibold shadow-sm">
-                      {<img src={userData?.user_image} alt={`Image du profil de ${userData?.user_firstname}`} className="w-full h-full rounded-full object-cover"/> || userData?.user_firstname?.[0]?.toUpperCase()}
+                      {<img src={`/profiles/${userData?.user_image}`} alt={`Image du profil de ${userData?.user_firstname}`} className="w-full h-full rounded-full object-cover"/> || userData?.user_firstname?.[0]?.toUpperCase()}
                     </div>
                   </div>
                 </Button>

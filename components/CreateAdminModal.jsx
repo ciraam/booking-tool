@@ -13,7 +13,6 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
   const [formDataOrigin, setFormDataOrigin] = useState({
     firstname: '',
     lastname: '',
-    phone: '',
     pseudo: '',
     image: '',
     type: ''
@@ -72,18 +71,15 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
         body: JSON.stringify(formData)
       });
       if (!response.ok) throw new Error('Erreur création');
-      // console.log('Création admin:', formData);
-      // Simule un délai
-      // await new Promise(resolve => setTimeout(resolve, 1000));
       onClose();
     } catch (error) {
       console.error('Erreur:', error);
     } finally {
       setLoading(false);
       toast({
-            title: 'Création réussie',
-            variant: 'destructive',
-          });
+        title: 'Création réussie',
+        className: 'bg-green-500 text-white',
+      });
     }
   };
 
@@ -97,6 +93,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
       setAdminsLoading(false);
       return data;
     },
+    refetchInterval: 5000,
     enabled: admin_id !== 0,
   });
 
@@ -164,10 +161,8 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
       });
       return;
     }
-    // Ne sauvegarde que si la valeur a changé
-    if (value === formDataOrigin[field]) return;
 
-    if (value === 'type') console.log(formData.type);
+    if (value === formDataOrigin[field]) return;
 
     setSaving(prev => ({ ...prev, [field]: true }));
     setSaved(prev => ({ ...prev, [field]: false }));
@@ -207,6 +202,26 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
 
   const handleChange = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleCloseModal = () => {
+    setFormData({
+      firstname: '',
+      lastname: '',
+      pseudo: '',
+      email: '',
+      password: '',
+      role: '',
+      type: ''
+    });
+    setFormDataOrigin({
+      firstname: '',
+      lastname: '',
+      pseudo: '',
+      email: '',
+      type: ''
+    });
+    onClose();
   };
 
   if (isCreate) {
@@ -324,8 +339,8 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
               <Label htmlFor="role">Rôle *</Label>
               <select
                 id="role"
-                value={formData.role}
-                onChange={(e) => setFormData(prev => ({ ...prev, role: e.target.value }))}
+                value={formData.type}
+                onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
               >
@@ -371,7 +386,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
   } else {
     return (
       showModal && (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={handleCloseModal}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
@@ -390,7 +405,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
             <EditableField
               label="Prénom"
               icon={<SquareUser size={18} />}
-              value={formData.firstname}
+              value={formData.firstname || ''}
               onChange={(value) => handleChange('firstname', value)}
               onBlur={() => handleBlur('firstname')}
               saving={saving.firstname}
@@ -399,7 +414,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
             <EditableField
               label="Nom"
               icon={<SquareUser size={18} />}
-              value={formData.lastname}
+              value={formData.lastname || ''}
               onChange={(value) => handleChange('lastname', value)}
               onBlur={() => handleBlur('lastname')}
               saving={saving.lastname}
@@ -412,7 +427,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
             <EditableField
               label="Pseudo"
               icon={<SquareUser size={18} />}
-              value={formData.pseudo}
+              value={formData.pseudo || ''}
               onChange={(value) => handleChange('pseudo', value)}
               onBlur={() => handleBlur('pseudo')}
               saving={saving.pseudo}
@@ -422,7 +437,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
               label="Email"
               icon={<Mail size={18} />}
               type="email"
-              value={adminData.admin_email}
+              value={adminData?.admin_email || ''}
               onChange={(value) => handleChange('email', value)}
               onBlur={() => handleBlur('email')}
               saving={saving.email}
@@ -441,7 +456,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
               <Input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
-                value={password}
+                value={password || ''}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 className="w-full pl-10 pr-10 py-6 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition outline-none"
@@ -483,11 +498,12 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
             <Label htmlFor="role">Rôle *</Label>
             <select
               id="role"
-              value={formData.role}
+              value={formData.type || ''}
               onChange={(e) => setFormData(prev => ({ ...prev, type: e.target.value }))}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               onBlur={() => handleBlur('type')}
-              required
+              saving={saving.type}
+              saved={saved.type}
             >
               {roles.map(role => (
                 <option key={role} value={role}>{role}</option>
@@ -513,9 +529,7 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
         </div>
       </DialogContent>
     </Dialog>
-    )
-      
-    );
+    ));
   }
 }
 
