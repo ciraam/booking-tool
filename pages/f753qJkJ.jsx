@@ -293,12 +293,22 @@ export default function AdminDashboard({ user }) {
 
   };
 
-  const handleRemoveEvent = (event_id) => {
-
+  const handleRemoveEvent = async (event_id) => {
+    const response = await fetch(`/api/events/${event_id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Erreur de suppression');
+      await response.json();
+      fetchAdmins();
   };
 
-  const handleRemoveBooking = (booking_id) => {
-    
+  const handleRemoveBooking = async (booking_id) => {
+    const response = await fetch(`/api/bookings/${booking_id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Erreur de suppression');
+      await response.json();
+      fetchAdmins();
   };
 
   const handleShowUser = (user_id, user, userData) => {
@@ -309,8 +319,13 @@ export default function AdminDashboard({ user }) {
 
   };
 
-  const handleRemoveUser = (user_id) => {
-
+  const handleRemoveUser = async (user_id) => {
+    const response = await fetch(`/api/users/${user_id}`, {
+        method: 'DELETE',
+      });
+      if (!response.ok) throw new Error('Erreur de suppression');
+      await response.json();
+      fetchAdmins();
   };
 
   const handleModifyAdmin = (admin_id) => {
@@ -616,7 +631,7 @@ export default function AdminDashboard({ user }) {
                           <button className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
                             <Edit size={20} />
                           </button>
-                          <button className="p-2 bg-white rounded-lg hover:bg-gray-100 transition text-red-600">
+                          <button onClick={() => handleRemoveEvent(event.event_id)} className="p-2 bg-white rounded-lg hover:bg-gray-100 transition text-red-600">
                             <Trash2 size={20} />
                           </button>
                         </div>
@@ -702,7 +717,7 @@ export default function AdminDashboard({ user }) {
                                 <button className="p-2 hover:bg-gray-100 rounded-lg transition">
                                   <Edit size={18} />
                                 </button>
-                                <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                                <button onClick={() => handleRemoveEvent(event.event_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                                   <Trash2 size={18} />
                                 </button>
                               </div>
@@ -791,7 +806,7 @@ export default function AdminDashboard({ user }) {
                               </span>
                             </td>
                             {user.id === 1 && <td className="px-6 py-4">
-                              <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                              <button onClick={() => handleRemoveBooking(booking.booking_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                                 <Trash2 size={18} />
                               </button>
                             </td>}
@@ -917,7 +932,7 @@ export default function AdminDashboard({ user }) {
                           <button className="p-2 hover:bg-gray-100 rounded-lg transition">
                             <Edit size={18} />
                           </button>
-                          <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                          <button onClick={() => handleRemoveUser(user.user_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                             <Trash2 size={18} />
                           </button>
                         </div>)}
@@ -979,7 +994,7 @@ export default function AdminDashboard({ user }) {
                                 <button className="p-2 hover:bg-gray-100 rounded-lg transition">
                                   <Edit size={18} />
                                 </button>
-                                <button className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
+                                <button onClick={() => handleRemoveUser(user.user_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                                   <Trash2 size={18} />
                                 </button>
                               </div>

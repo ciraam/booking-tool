@@ -78,14 +78,17 @@ export default async function handler(req, res) {
     //   return res.status(200).json(updatedEvent);
     // }
 
-    // // ----- DELETE -----
-    // if (req.method === 'DELETE') {
-    //   await prisma.booking.delete({
-    //     where: { booking_id: id },
-    //   });
+    // ----- DELETE -----
+    if (req.method === 'DELETE') {
+      if (session.user.role !== "admin") {
+        return res.status(403).json({ message: "Accès refusé" });
+      }
+      await prisma.booking.delete({
+        where: { booking_id: parseInt(id) },
+      });
 
-    //   return res.status(200).json({ message: 'Événement supprimé' });
-    // }
+      return res.status(200).json({ message: 'Événement supprimé' });
+    }
 
     // ----- AUTRES METHODES -----
     return res.status(405).json({ message: 'Méthode non autorisée' });

@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   return res.status(401).json({ message: "Non authentifié" });
   }
 
-  // Vérifie si user ou admin 
-  if (session.user.role !== "user" || session.user.role !== "admin") {
+  // Vérifie si admin 
+  if (session.user.role !== "admin") {
   return res.status(403).json({ message: "Accès refusé" });
   }
 

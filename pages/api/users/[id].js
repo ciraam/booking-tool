@@ -78,9 +78,9 @@ export default async function handler(req, res) {
     // ----- DELETE -----
     if (req.method === 'DELETE') {
       // Vérifie que l'utilisateur supprime son propre profil (ou est admin)
-      if (session.user.id !== parseInt(id)) {
-        return res.status(403).json({ message: "Accès refusé" });
-      }
+      // if (session.user.id !== parseInt(id)) {
+      //   return res.status(403).json({ message: "Accès refusé" });
+      // }
       await prisma.user.delete({
         where: { user_id: parseInt(id) },
       });
