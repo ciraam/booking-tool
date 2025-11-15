@@ -10,7 +10,7 @@ export default async function handler(req, res) {
   return res.status(401).json({ message: "Non authentifié" });
   }
 
-  // Vérifie si user ou admin 
+  // Vérifie si admin 
   if (session.user.role !== "admin") {
   return res.status(403).json({ message: "Accès refusé" });
   }
@@ -19,9 +19,28 @@ export default async function handler(req, res) {
     // ----- GET -----
     if (req.method === 'GET') {
       const events = await prisma.user.findMany({
-        orderBy: { user_id: 'asc' },
+        orderBy: { user_id: 'desc' },
       });
       return res.status(200).json(events);
+    }
+
+    // ----- POST -----
+    if (req.method === 'POST') {
+      const body = req.body;
+
+      const newUser = await prisma.user.create({
+        data: {
+          user_firstname: body.firstname,
+          user_lastname: body.lastname,
+          user_email: body.email,
+          user_pseudo: '',
+          user_password: await bcrypt.hash(body.password, 10),
+          user_phone: body.phone,
+          user_image: '',
+        },
+      });
+
+      return res.status(201).json(newUser);
     }
 
     // ----- AUTRES METHODES -----

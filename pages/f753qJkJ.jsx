@@ -23,6 +23,7 @@ import {
 import { ProfileModal } from '../components/ProfileModal.jsx';
 import { CreateEventModal } from '../components/CreateEventModal.jsx';
 import { CreateAdminModal } from '../components/CreateAdminModal.jsx';
+import { CreateUserModal } from '../components/CreateUserModal.jsx';
 import { NotificationMenu } from '../components/NotificationMenu.jsx';
 import { PaginationControls } from '../components/PaginationControls.jsx';
 import { useInactivityTimer, InactivityWarning } from '../hooks/useInactivityTimer.jsx';
@@ -33,6 +34,7 @@ export default function AdminDashboard({ user }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [createAdminModalOpen, setCreateAdminModalOpen] = useState(false);
+  const [createUserModalOpen, setCreateUserModalOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const router = useRouter();
   const [notification, setNotifications] = useState([]);
@@ -54,6 +56,8 @@ export default function AdminDashboard({ user }) {
   const [logsLoading, setLogsLoading] = useState(false);
   const [isModalCreateAdmin, setIsModalCreateAdmin] = useState(true);
   const [admin_idModal, setAdmin_idModal] = useState(0);
+  const [isModalCreateUser, setIsModalCreateUser] = useState(true);
+  const [user_idModal, setUser_idModal] = useState(0);
 
   const { mutate: updateStatus, isLoading, isError, error } = useMutation({
     mutationFn: async (status) => {
@@ -285,11 +289,16 @@ export default function AdminDashboard({ user }) {
     setCreateAdminModalOpen(true);
   };
 
-  const handleShowEvent = (event_id, user, userData) => {
+  const handleNewUser = () => {
+    setIsModalCreateUser(true);
+    setCreateUserModalOpen(true);
+  };
+
+  const handleShowEvent = (event_id) => {
 
   };
 
-  const handleModifyEvent = (event_id, user, userData) => {
+  const handleModifyEvent = (event_id) => {
 
   };
 
@@ -311,12 +320,11 @@ export default function AdminDashboard({ user }) {
       fetchAdmins();
   };
 
-  const handleShowUser = (user_id, user, userData) => {
-
-  };
-
-  const handleModifyUser = (user_id, user, userData) => {
-
+  const handleModifyUser = (user_id) => {
+    setUser_idModal(user_id);
+    setIsModalCreateUser(false);
+    setCreateUserModalOpen(true);
+    console.log(user_id)
   };
 
   const handleRemoveUser = async (user_id) => {
@@ -864,7 +872,7 @@ export default function AdminDashboard({ user }) {
                     <Filter size={20} />
                     Filtres
                   </Button>
-                  {userData.admin_type !== "Modérateur" && (<Button className="gap-2">
+                  {userData.admin_type !== "Modérateur" && (<Button onClick={() => handleNewUser()} className="gap-2">
                     <Users size={20} />
                     Nouvel utilisateur
                   </Button>)}
@@ -897,9 +905,9 @@ export default function AdminDashboard({ user }) {
                           </div>
                           <div>
                             <h3 className="font-semibold text-gray-800">{user.user_firstname} {user.user_lastname}</h3>
-                            <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadge(user.status)}`}>
+                            {/* <span className={`text-xs px-2 py-1 rounded-full ${getStatusBadge(user.status)}`}>
                               {getStatusText(user.status)}
-                            </span>
+                            </span> */}
                           </div>
                         </div>
                         {/* <button className="p-2 hover:bg-gray-100 rounded-lg transition">
@@ -926,10 +934,10 @@ export default function AdminDashboard({ user }) {
                           <p className="text-lg font-semibold text-gray-800">{user.bookings}</p>
                         </div>
                         {userData.admin_type !== "Modérateur" && (<div className="flex gap-2">
-                          <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
+                          {/* <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
                             <Eye size={18} />
-                          </button>
-                          <button className="p-2 hover:bg-gray-100 rounded-lg transition">
+                          </button> */}
+                          <button onClick={() => handleModifyUser(user.user_id)} className="p-2 hover:bg-gray-100 rounded-lg transition">
                             <Edit size={18} />
                           </button>
                           <button onClick={() => handleRemoveUser(user.user_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
@@ -952,7 +960,7 @@ export default function AdminDashboard({ user }) {
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Téléphone</th>
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Inscrit le</th>
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Réservations</th>
-                          <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                          {/* <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Statut</th> */}
                           <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                         </tr>
                       </thead>
@@ -981,23 +989,23 @@ export default function AdminDashboard({ user }) {
                             <td className="px-6 py-4 text-sm text-gray-700">{user.user_phone}</td>
                             <td className="px-6 py-4 text-sm text-gray-700">{new Date(user.user_created).toLocaleDateString('fr-FR')}</td>
                             <td className="px-6 py-4 text-sm font-medium text-gray-900">{user.bookings}</td>
-                            <td className="px-6 py-4">
+                            {/* <td className="px-6 py-4">
                               <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadge(user.status)}`}>
                                 {getStatusText(user.status)}
                               </span>
-                            </td>
+                            </td> */}
                             <td className="px-6 py-4">
-                              <div className="flex gap-2">
-                                <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
+                              {userData.admin_type !== "Modérateur" && (<div className="flex gap-2">
+                                {/* <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
                                   <Eye size={18} />
-                                </button>
-                                <button className="p-2 hover:bg-gray-100 rounded-lg transition">
+                                </button> */}
+                                <button onClick={() => handleModifyUser(user.user_id)} className="p-2 hover:bg-gray-100 rounded-lg transition">
                                   <Edit size={18} />
                                 </button>
                                 <button onClick={() => handleRemoveUser(user.user_id)} className="p-2 hover:bg-red-50 rounded-lg transition text-red-600">
                                   <Trash2 size={18} />
                                 </button>
-                              </div>
+                              </div>)}
                             </td>
                           </tr>
                         ))}
@@ -1596,7 +1604,10 @@ export default function AdminDashboard({ user }) {
       <CreateEventModal open={createEventModalOpen} onClose={() => setCreateEventModalOpen(false)} />
 
       {/* Create Admin Modal */}
-      {user?.id === 1 && (<CreateAdminModal open={createAdminModalOpen} onClose={() => setCreateAdminModalOpen(false)} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />)}
+      <CreateAdminModal open={createAdminModalOpen} onClose={() => setCreateAdminModalOpen(false)} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />
+
+      {/* Create User Modal */}
+      <CreateUserModal open={createUserModalOpen} onClose={() => setCreateUserModalOpen(false)} isCreate={isModalCreateUser} user_id={user_idModal} userData={userData} />
 
       <ProfileModal open={profileModalOpen} onClose={() => setProfileModalOpen(false)} user={user} userData={formatUserData} />
     </div>

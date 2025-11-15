@@ -80,6 +80,10 @@ export function CreateAdminModal({ open, onClose, isCreate, admin_id, userData }
       console.error('Erreur:', error);
     } finally {
       setLoading(false);
+      toast({
+            title: 'Création réussie',
+            variant: 'destructive',
+          });
     }
   };
 
