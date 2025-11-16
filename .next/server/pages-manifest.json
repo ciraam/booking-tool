@@ -5,11 +5,15 @@
   "/": "pages/index.js",
   "/Zvx4T7e6": "pages/Zvx4T7e6.js",
   "/api/admins/[id]": "pages/api/admins/[id].js",
-  "/api/notifications/admin/[id]": "pages/api/notifications/admin/[id].js",
   "/api/logs": "pages/api/logs.js",
+  "/api/notifications/admin/[id]": "pages/api/notifications/admin/[id].js",
+  "/f753qJkJ": "pages/f753qJkJ.js",
   "/api/events": "pages/api/events.js",
   "/api/bookings/getAllBookings": "pages/api/bookings/getAllBookings.js",
   "/api/users": "pages/api/users.js",
   "/api/admins": "pages/api/admins.js",
-  "/f753qJkJ": "pages/f753qJkJ.js"
+  "/api/auth/[...nextauth]": "pages/api/auth/[...nextauth].js",
+  "/api/users/getUser": "pages/api/users/getUser.js",
+  "/api/events/[id]": "pages/api/events/[id].js",
+  "/api/users/[id]": "pages/api/users/[id].js"
 }

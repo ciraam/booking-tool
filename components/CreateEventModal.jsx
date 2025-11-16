@@ -48,6 +48,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
   const [saved, setSaved] = useState({});
 
   const categories = ['Concert', 'Conférence', 'Festival', 'Sport', 'Théâtre', 'Exposition', 'Autre'];
+  const status = ['Public', 'Privé'];
 
   const categoryColors = {
     'Concert': 'bg-purple-100 text-purple-800 border-purple-200',
@@ -671,7 +672,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <EditableField
-                    label="Nom de l'événement*"
+                    label="Nom de l'événement"
                     // icon={<SquareUser size={18} />}
                     value={formData.name}
                     onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
@@ -681,7 +682,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="category">Catégorie *</Label>
+                  <Label htmlFor="category">Catégorie</Label>
                   <select
                     id="category"
                     value={formData.category}
@@ -691,7 +692,6 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                     saving={saving.category}
                     saved={saved.category}
                   >
-                    <option value="">Sélectionner...</option>
                     {categories.map(cat => (
                       <option key={cat} value={cat}>{cat}</option>
                     ))}
@@ -701,7 +701,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
 
               {/* Description */}
               <div className="space-y-2">
-                <Label htmlFor="description">Description *</Label>
+                <Label htmlFor="description">Description</Label>
                 <textarea
                   id="description"
                   value={formData.description}
@@ -717,7 +717,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
               {/* Date & Heure */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="date">Date *</Label>
+                  <Label htmlFor="date">Date</Label>
                   <Input
                     id="date"
                     type="date"
@@ -729,7 +729,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="time">Heure *</Label>
+                  <Label htmlFor="time">Heure</Label>
                   <Input
                     id="time"
                     type="time"
@@ -746,7 +746,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <EditableField
-                    label="Lieu *"
+                    label="Lieu"
                     // icon={<SquareUser size={18} />}
                     value={formData.location}
                     onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
@@ -757,7 +757,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                 </div>
                 <div className="space-y-2">
                   <EditableField
-                    label="Adresse complète *"
+                    label="Adresse complète"
                     // icon={<SquareUser size={18} />}
                     value={formData.address}
                     onChange={(e) => setFormData(prev => ({ ...prev, address: e.target.value }))}
@@ -784,7 +784,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
               {/* Prix & Places */}
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="price">Prix *</Label>
+                  <Label htmlFor="price">Prix</Label>
                   <div className="relative">
                     <EuroIcon size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                     <Input
@@ -804,7 +804,7 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                   <p className="text-xs text-gray-500">Mettre 0 pour un événement gratuit</p>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="seats">Nombre de places *</Label>
+                  <Label htmlFor="seats">Nombre de places</Label>
                   <Input
                     id="seats"
                     type="number"
@@ -818,6 +818,26 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                 </div>
               </div>
               
+              {/* Status */}
+              <div className="space-y-2">
+                <div className="space-y-2">
+                  <Label htmlFor="status">Rendre l'événement</Label>
+                  <select
+                    id="status"
+                    value={formData.status}
+                    onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    onBlur={() => handleBlur('status')}
+                    saving={saving.status}
+                    saved={saved.status}
+                  >
+                    {status.map(cat => (
+                      <option key={cat} value={cat === 'Public' ? 'public' : 'private'}>{cat}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
               <div className="flex items-center justify-between mt-4 p-3 border-t">
                 <p className=" p-3 text-xs text-blue-800 bg-blue-50 border border-blue-200 rounded-lg">
                   💡 <strong>Auto-sauvegarde :</strong> Sortir du champ enregistre automatiquement vos changements.
@@ -850,7 +870,10 @@ export function CreateEventModal({ open, onClose, isCreate, event_id, userData }
                       </div>
                     )}
                     {formData.category && (
-                      <div className="absolute top-4 right-4">
+                      <div className="absolute top-4 right-4 flex gap-2">
+                        <span className={`px-3 py-1 rounded-full text-xs font-medium border bg-gray-100 text-gray-800`}>
+                          {formData.status === 'public' ? 'Public' : 'Privé'}
+                        </span>
                         <span className={`px-3 py-1 rounded-full text-xs font-medium border ${categoryColors[formData.category] || 'bg-gray-100 text-gray-800'}`}>
                           {formData.category}
                         </span>

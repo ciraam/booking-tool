@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Grid3x3, List, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Grid3x3, List, ChevronLeft, ChevronRight, EyeOff } from 'lucide-react';
 import { Pin, Search, Filter, MoreVertical, Edit, Trash2, Eye, Download, Calendar, Clock, MapPin, Mail, Phone, CheckCircle, XCircle, AlertCircle, TrendingUp, TrendingDown, Plus, Upload, DollarSign, Image as ImageIcon } from 'lucide-react';
 import { Button } from '../components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '../components/ui/dialog';
@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth/next";
 import { useQuery } from '@tanstack/react-query';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from "next/router";
+import { useToast } from '../hooks/use-toast.jsx';
 import { signOut } from "next-auth/react";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { Menu, X, Home, Users, Settings, LogOut, BarChart3, FileText, Bell, UserRoundCog, CalendarCog } from 'lucide-react';
@@ -60,6 +61,7 @@ export default function AdminDashboard({ user }) {
   const [user_idModal, setUser_idModal] = useState(0);
   const [isModalCreateEvent, setIsModalCreateEvent] = useState(true);
   const [event_idModal, setEvent_idModal] = useState(0);
+  const { toast } = useToast();
   
   const { mutate: updateStatus, isLoading, isError, error } = useMutation({
     mutationFn: async (status) => {
@@ -83,7 +85,7 @@ export default function AdminDashboard({ user }) {
       // console.log('Mutation réussie:', data);
     },
     onError: (error) => {
-      // console.error('Erreur lors de la mutation:', error);
+      console.error('Erreur lors de la mutation:', error);
     }
   });
   
@@ -239,7 +241,9 @@ export default function AdminDashboard({ user }) {
       cancelled: 'Annulée',
       online: 'En ligne',
       offline: 'Hors ligne',
-      past: 'Passée'
+      past: 'Passée',
+      private: 'Privé',
+      public: 'Public'
     };
     return texts[status] || status;
   };
@@ -301,8 +305,57 @@ export default function AdminDashboard({ user }) {
     setCreateUserModalOpen(true);
   };
 
-  const handleToggleStatusEvent = (event_id) => {
-    
+  const handleToggleStatusEvent = async (event_id, event_status) => {
+    if (event_status === 'private' || event_status === 'sketch') {
+      try {
+        const fieldBd = `event_status`;
+        const value = `public`;
+        const response = await fetch(`/api/events/${event_id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [fieldBd]: String(value) })
+        });
+        if (!response.ok) throw new Error('Erreur de sauvegarde');
+        await response.json();
+        toast({
+          title: 'Votre événement est désormais public',
+          description: 'La modification a été sauvegardée',
+          className: 'bg-green-500 text-white',
+        });
+      } catch (error) {
+        console.error('Erreur:', error);
+        toast({
+          title: 'Erreur lors de la sauvegarde',
+          description: 'Restauration de la modification',
+          variant: 'destructive',
+        });
+      }
+    } else {
+      try {
+        const fieldBd = `event_status`;
+        const value = `private`;
+        const response = await fetch(`/api/events/${event_id}`, {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ [fieldBd]: String(value) })
+        });
+        if (!response.ok) throw new Error('Erreur de sauvegarde');
+        await response.json();
+        toast({
+          title: 'Votre événement est désormais privé',
+          description: 'La modification a été sauvegardée',
+          className: 'bg-green-500 text-white',
+        });
+      } catch (error) {
+        console.error('Erreur:', error);
+        toast({
+          title: 'Erreur lors de la sauvegarde',
+          description: 'Restauration de la modification',
+          variant: 'destructive',
+        });
+      }
+    }
+    fetchEvents();
   };
 
   const handleModifyEvent = (event_id) => {
@@ -641,8 +694,8 @@ export default function AdminDashboard({ user }) {
                       </div>
                       <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
                         <div className="flex gap-2">
-                          <button className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
-                            <Eye size={20} />
+                          <button onClick={() => handleToggleStatusEvent(event.event_id, event.event_status)} className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
+                            {event.event_status === 'public' ? <Eye size={20} /> : <EyeOff size={20} />}
                           </button>
                           <button onClick={() => handleModifyEvent(event.event_id)} className="p-2 bg-white rounded-lg hover:bg-gray-100 transition">
                             <Edit size={20} />
@@ -727,8 +780,8 @@ export default function AdminDashboard({ user }) {
                             </td>
                             <td className="px-6 py-4">
                               <div className="flex gap-2">
-                                <button className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
-                                  <Eye size={18} />
+                                <button onClick={() => handleToggleStatusEvent(event.event_id, event.event_status)} className="p-2 hover:bg-blue-50 rounded-lg transition text-blue-600">
+                                  {event.event_status === 'public' ? <Eye size={18} /> : <EyeOff size={18} />}
                                 </button>
                                 <button onClick={() => handleModifyEvent(event.event_id)} className="p-2 hover:bg-gray-100 rounded-lg transition">
                                   <Edit size={18} />
@@ -1609,13 +1662,13 @@ export default function AdminDashboard({ user }) {
       </main>
       
       {/* Create Event Modal */}
-      <CreateEventModal open={createEventModalOpen} onClose={() => {setCreateEventModalOpen(false); setEvent_idModal(0)}} isCreate={isModalCreateEvent} event_id={event_idModal} userData={userData} />
+      <CreateEventModal open={createEventModalOpen} onClose={() => {setCreateEventModalOpen(false); setEvent_idModal(0); fetchEvents()}} isCreate={isModalCreateEvent} event_id={event_idModal} userData={userData} />
 
       {/* Create Admin Modal */}
-      <CreateAdminModal open={createAdminModalOpen} onClose={() => {setCreateAdminModalOpen(false); setAdmin_idModal(0)}} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />
+      <CreateAdminModal open={createAdminModalOpen} onClose={() => {setCreateAdminModalOpen(false); setAdmin_idModal(0); fetchAdmins()}} isCreate={isModalCreateAdmin} admin_id={admin_idModal} userData={userData} />
 
       {/* Create User Modal */}
-      <CreateUserModal open={createUserModalOpen} onClose={() => {setCreateUserModalOpen(false); setUser_idModal(0)}} isCreate={isModalCreateUser} user_id={user_idModal} userData={userData} />
+      <CreateUserModal open={createUserModalOpen} onClose={() => {setCreateUserModalOpen(false); setUser_idModal(0); fetchUsers()}} isCreate={isModalCreateUser} user_id={user_idModal} userData={userData} />
 
       <ProfileModal open={profileModalOpen} onClose={() => setProfileModalOpen(false)} user={user} userData={formatUserData} />
     </div>

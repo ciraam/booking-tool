@@ -114,12 +114,21 @@ export default function Index({ user, isDisconnect }) {
   if (isError) return <p>Erreur de chargement des événements.</p>;
   
   const now = new Date();
-  const upcomingEvents = filteredEvents.filter(
-    event => new Date(event.event_date) > now
-  );
-  const pastEvents = filteredEvents.filter(
-    event => new Date(event.event_date) < now
-  );
+  
+  const upcomingEvents = filteredEvents
+  .filter(event => {
+    const eventDate = new Date(event.event_date);
+    return eventDate > now && event.event_status === 'public';
+  })
+  .sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
+
+  const pastEvents = filteredEvents
+  .filter(event => {
+    const eventDate = new Date(event.event_date);
+    return eventDate < now && event.event_status === 'public';
+  })
+  .sort((a, b) => new Date(b.event_date) - new Date(a.event_date));
+
   const displayedEvents = showUpcoming ? upcomingEvents : pastEvents;
 
   return (
