@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : dim. 02 nov. 2025 à 16:47
+-- Généré le : dim. 16 nov. 2025 à 00:23
 -- Version du serveur : 8.2.0
 -- Version de PHP : 8.2.13
 
@@ -49,15 +49,15 @@ DELIMITER ;
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE IF NOT EXISTS `admin` (
   `admin_id` int NOT NULL AUTO_INCREMENT,
-  `admin_firstname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_pseudo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_firstname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_lastname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_pseudo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `admin_password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `admin_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_role` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'admin',
-  `admin_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `admin_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'offline',
+  `admin_role` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'admin',
+  `admin_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `admin_status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'offline',
   `admin_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`admin_id`),
   UNIQUE KEY `Admin_admin_email_key` (`admin_email`),
@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `admin_firstname`, `admin_lastname`, `admin_pseudo`, `admin_email`, `admin_password`, `admin_image`, `admin_role`, `admin_type`, `admin_status`, `admin_created`) VALUES
-(1, 'Admin', 'Super', 'supadmin', 'admin@example.com', '$2a$10$wsTIwvChN/r4H9jEJR2gCe.xT/Yo7rsmftxwfuLz8NSf1JTITkpFG', '/profiles/user-1-1761881655284.jpg', 'admin', 'Super admin', 'offline', '2025-10-22 03:30:37.000');
+(1, 'Admin', 'Super', 'supadmin', 'admin@example.com', '$2a$10$ZFCCTffEshE/1dqLvwh7ceN8uV0yGrYdIO8LCqjJn00dIwfkpLvQG', 'profiles-admin-1-1763235212774.webp', 'admin', 'Super Admin', 'online', '2025-10-22 03:30:37.000');
 
 -- --------------------------------------------------------
 
@@ -79,16 +79,16 @@ INSERT INTO `admin` (`admin_id`, `admin_firstname`, `admin_lastname`, `admin_pse
 
 DROP TABLE IF EXISTS `booking`;
 CREATE TABLE IF NOT EXISTS `booking` (
-  `booking_id` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `booking_event_id` int NOT NULL,
   `booking_user_id` int DEFAULT NULL,
-  `booking_user_firstname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `booking_user_lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `booking_user_email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `booking_user_phone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_user_firstname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_user_lastname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_user_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `booking_user_phone` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `booking_price` int NOT NULL,
   `booking_quantity` int NOT NULL,
-  `booking_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'upcoming',
+  `booking_status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'upcoming',
   `booking_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`booking_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -138,19 +138,19 @@ DELIMITER ;
 DROP TABLE IF EXISTS `event`;
 CREATE TABLE IF NOT EXISTS `event` (
   `event_id` int NOT NULL AUTO_INCREMENT,
-  `event_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `event_description` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_description` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_price` int NOT NULL,
-  `event_location` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `event_address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_location` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_address` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_date` datetime(3) NOT NULL,
-  `event_time` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `event_time` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_category` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_organizer` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `event_seats` int NOT NULL,
   `event_seats_start` int NOT NULL,
-  `event_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'sketch',
+  `event_status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'sketch',
   `event_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`event_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -160,14 +160,14 @@ CREATE TABLE IF NOT EXISTS `event` (
 --
 
 INSERT INTO `event` (`event_id`, `event_name`, `event_description`, `event_price`, `event_location`, `event_address`, `event_date`, `event_time`, `event_category`, `event_organizer`, `event_image`, `event_seats`, `event_seats_start`, `event_status`, `event_created`) VALUES
-(1, 'Festival Électro Summer', 'Le plus grand festival de musique électronique de l\'été ! Avec plus de 50 artistes internationaux, 3 scènes et une ambiance inoubliable. Venez danser du coucher au lever du soleil sur les mei', 0, 'Parc des Expositions', '123 Avenue de la Musique, Paris 75001', '2025-07-15 00:00:00.000', '18:00:00', 'Festival', 'EventPro Productions', 'festival.jpg', 4999, 5000, 'sketch', '2025-10-18 22:28:01.254'),
-(2, 'Conférence Tech Innovation 2025', 'Découvrez les dernières innovations technologiques avec les leaders de l\'industrie. Au programme : IA, blockchain, cloud computing et développement durable. Networking, workshops et keynotes ', 0, 'Centre de Congrès', '45 Rue de l\'Innovation, Lyon 69002', '2025-06-20 00:00:00.000', '09:00:00', 'Conférence', 'TechConnect', 'conference.jpg', 799, 800, 'sketch', '2025-10-18 22:28:01.254'),
-(3, 'Concert Rock Legends', 'Une soirée inoubliable avec les plus grandes légendes du rock ! Revivez les plus grands hits dans une ambiance électrique. Son premium, effets visuels spectaculaires et surprises garanties.', 0, 'Zénith Arena', '78 Boulevard du Spectacle, Marseille 13001', '2025-08-05 00:00:00.000', '20:00:00', 'Concert', 'Live Nation France', 'concert.jpg', 3498, 3500, 'sketch', '2025-10-18 22:28:01.254'),
-(4, 'Match de Football - Finale', 'La finale tant attendue du championnat ! Assistez au match décisif dans une ambiance de feu. Supporters, chants, émotions fortes garanties. Ne manquez pas cet événement historique.', 0, 'Stade Municipal', '12 Avenue des Sports, Bordeaux 33000', '2025-06-30 00:00:00.000', '21:00:00', 'Sport', 'Ligue de Football', 'sport.jpg', 14999, 15000, 'sketch', '2025-10-18 22:28:01.254'),
-(5, 'Jazz & Soul Night', 'Une soirée intimiste dédiée au jazz et à la soul music. Laissez-vous porter par des mélodies envoûtantes dans un cadre raffiné. Cocktails premium et ambiance feutrée.', 0, 'Le Blue Note Club', '89 Rue du Jazz, Nice 06000', '2025-07-10 00:00:00.000', '19:30:00', 'Concert', 'Jazz Productions', 'concert.jpg', 249, 250, 'sketch', '2025-10-18 22:28:01.254'),
-(6, 'Salon de l\'Entrepreneuriat', 'Le rendez-vous incontournable des entrepreneurs et startups. Conférences, ateliers pratiques, speed-networking et rencontres avec des investisseurs. Boostez votre business !', 0, 'Palais des Congrès', '34 Place de l\'Entreprise, Toulouse 31000', '2025-09-12 00:00:00.000', '10:00:00', 'Conférence', 'Business Connect', 'conference.jpg', 999, 1000, 'sketch', '2025-10-18 22:28:01.254'),
-(7, 'Festival des Arts de la Rue', 'Trois jours de spectacles gratuits et performances artistiques ! Cirque, théâtre de rue, concerts live, arts visuels. Pour toute la famille dans une ambiance festive et colorée.', 0, 'Centre-Ville', 'Place de la République, Nantes 44000', '2025-08-20 00:00:00.000', '14:00:00', 'Festival', 'Ville de Nantes', 'festival.jpg', 9999, 1000, 'sketch', '2025-10-18 22:28:01.254'),
-(8, 'Tournoi de Tennis International', 'Les meilleurs joueurs mondiaux s\'affrontent sur terre battue. Assiste aux matches les plus intenses et vibrez avec les champions. Ambiance garantie !', 0, 'Tennis Club Premium', '56 Route du Sport, Strasbourg 67000', '2025-10-05 00:00:00.000', '11:00:00', 'Sport', 'Tennis Federation', 'sport.jpg', 4999, 5000, 'sketch', '2025-10-18 22:28:01.254');
+(1, 'Festival Électro Summer', 'Le chant des sirènes.', 0, 'Parc des Expositions', '123 Avenue de la Musique, Paris 75001', '2025-07-15 00:00:00.000', '20:00', 'Festival', 'EventPro Productions', 'events-admin-1-1763235175376.jpeg', 4999, 5000, 'private', '2025-10-18 22:28:01.254'),
+(2, 'Conférence Tech Innovation 2025', 'Découvrez les dernières innovations technologiques avec les leaders de l\'industrie. Au programme : IA, blockchain, cloud computing et développement durable. Networking, workshops et keynotes ', 0, 'Centre de Congrès', '45 Rue de l\'Innovation, Lyon 69002', '2025-06-20 00:00:00.000', '12:00', 'Conférence', 'TechConnect', 'conference.jpg', 799, 800, 'public', '2025-10-18 22:28:01.254'),
+(3, 'Concert Rock Legends', 'Une soirée inoubliable avec les plus grandes légendes du rock ! Revivez les plus grands hits dans une ambiance électrique. Son premium, effets visuels spectaculaires et surprises garanties.', 0, 'Zénith Arena', '78 Boulevard du Spectacle, Marseille 13001', '2025-08-05 00:00:00.000', '20:00:00', 'Concert', 'Live Nation France', 'concert.jpg', 3498, 3500, 'public', '2025-10-18 22:28:01.254'),
+(4, 'Match de Football - Finale', 'La finale tant attendue du championnat ! Assistez au match décisif dans une ambiance de feu. Supporters, chants, émotions fortes garanties. Ne manquez pas cet événement historique.', 0, 'Stade Municipal', '12 Avenue des Sports, Bordeaux 33000', '2025-06-30 00:00:00.000', '21:00:00', 'Sport', 'Ligue de Football', 'sport.jpg', 14999, 15000, 'public', '2025-10-18 22:28:01.254'),
+(5, 'Jazz & Soul Night', 'Une soirée intimiste dédiée au jazz et à la soul music. Laissez-vous porter par des mélodies envoûtantes dans un cadre raffiné. Cocktails premium et ambiance feutrée.', 0, 'Le Blue Note Club', '89 Rue du Jazz, Nice 06000', '2025-07-10 00:00:00.000', '19:30:00', 'Concert', 'Jazz Productions', 'concert.jpg', 249, 250, 'public', '2025-10-18 22:28:01.254'),
+(6, 'Salon de l\'Entrepreneuriat', 'Le rendez-vous incontournable des entrepreneurs et startups. Conférences, ateliers pratiques, speed-networking et rencontres avec des investisseurs. Boostez votre business !', 0, 'Palais des Congrès', '34 Place de l\'Entreprise, Toulouse 31000', '2025-09-12 00:00:00.000', '10:00:00', 'Conférence', 'Business Connect', 'conference.jpg', 999, 1000, 'public', '2025-10-18 22:28:01.254'),
+(7, 'Festival des Arts de la Rue', 'Trois jours de spectacles gratuits et performances artistiques ! Cirque, théâtre de rue, concerts live, arts visuels. Pour toute la famille dans une ambiance festive et colorée.', 0, 'Centre-Ville', 'Place de la République, Nantes 44000', '2025-08-20 00:00:00.000', '14:00:00', 'Festival', 'Ville de Nantes', 'festival.jpg', 999, 1000, 'public', '2025-10-18 22:28:01.254'),
+(8, 'Tournoi de Tennis International', 'Les meilleurs joueurs mondiaux s\'affrontent sur terre battue. Assiste aux matches les plus intenses et vibrez avec les champions. Ambiance garantie !', 0, 'Tennis Club Premium', '56 Route du Sport, Strasbourg 67000', '2025-10-05 00:00:00.000', '11:00:00', 'Sport', 'Tennis Federation', 'sport.jpg', 4999, 5000, 'public', '2025-10-18 22:28:01.254');
 
 -- --------------------------------------------------------
 
@@ -183,9 +183,9 @@ CREATE TABLE IF NOT EXISTS `logs` (
   `logs_admin_firstname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `logs_admin_lastname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `logs_admin_pseudo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logs_admin_email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logs_admin_image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logs_admin_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs_admin_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs_admin_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs_admin_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `logs_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`logs_id`),
   UNIQUE KEY `Logs_logs_admin_email_key` (`logs_admin_email`),
@@ -209,10 +209,10 @@ DROP TABLE IF EXISTS `notificationadmin`;
 CREATE TABLE IF NOT EXISTS `notificationadmin` (
   `notification_id` int NOT NULL AUTO_INCREMENT,
   `notification_admin_id` int NOT NULL,
-  `notification_type` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notification_title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notification_message` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `notification_read` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no',
+  `notification_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notification_title` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notification_message` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notification_read` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no',
   `notification_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`notification_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -235,11 +235,11 @@ DROP TABLE IF EXISTS `organization`;
 CREATE TABLE IF NOT EXISTS `organization` (
   `organization_id` int NOT NULL AUTO_INCREMENT,
   `organization_user_id` int NOT NULL,
-  `organization_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `organization_description` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization_description` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `organization_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `organization_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
-  `organization_category` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `organization_category` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`organization_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -253,8 +253,8 @@ DROP TABLE IF EXISTS `ticket`;
 CREATE TABLE IF NOT EXISTS `ticket` (
   `ticket_id` int NOT NULL AUTO_INCREMENT,
   `ticket_event_id` int NOT NULL,
-  `ticket_name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `ticket_description` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ticket_name` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ticket_description` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ticket_price` int NOT NULL,
   `ticket_available` int NOT NULL,
   `ticket_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -295,19 +295,19 @@ INSERT INTO `ticket` (`ticket_id`, `ticket_event_id`, `ticket_name`, `ticket_des
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `user_id` int NOT NULL AUTO_INCREMENT,
-  `user_firstname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_lastname` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_pseudo` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_phone` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_firstname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_lastname` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_pseudo` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_email` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_phone` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_password` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_image` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_image` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `user_isActived` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'no',
-  `user_role` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
-  `user_status` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'offline',
+  `user_role` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'user',
+  `user_status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'offline',
   `user_created` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Déchargement des données de la table `user`
@@ -317,10 +317,11 @@ INSERT INTO `user` (`user_id`, `user_firstname`, `user_lastname`, `user_pseudo`,
 (1, 'test', 'test', '', 'test@test.test', '0606060606', '$2a$10$VMcZaAnUAypEeM7Qx7L4/ucAs9jcvDGd6VNNalrsL83o6qsOANx0m', '', 'no', 'user', 'offline', '2025-10-07 02:15:22.000'),
 (2, 'ddd', 'dddddd', '', 'ss^^^^^@glgl.fr', '09 83 38 34 31', '$2b$10$baJLLbgpfK2MQSPFRJydau0It1COqOVo/Hut8rYfV.dV6.ITkVnzG', '', 'no', 'user', 'offline', '2025-10-28 20:31:01.441'),
 (3, 'dqdqdd', 'dqdqdd', '', 'test@test.frd', '09 83 38 34 31', '$2b$10$5CAhQJA3VCCl3HGIbsoMU.1BJTmpAwmnhayn6ifiq52/yeJLQ5MCO', '', 'no', 'user', 'offline', '2025-10-28 20:40:37.507'),
-(4, 'Romaric', 'Test', '', 'test@test.fr', '09 83 38 34 31', '$2a$10$w51SsVadrN7unrb0ottu/.gscVpoizx/A6Q7PuUV8SFcqD7PDCx7G', '/profiles/user-4-1761706600651.png', 'no', 'user', 'offline', '2025-10-28 23:13:34.207'),
+(4, 'Romaric', 'Test', '', 'test@test.fr', '09 83 38 34 31', '$2a$10$w51SsVadrN7unrb0ottu/.gscVpoizx/A6Q7PuUV8SFcqD7PDCx7G', 'profiles-user-4-1763235612792.webp', 'no', 'user', 'offline', '2025-10-28 23:13:34.207'),
 (5, 'test', 'test', '', 'test@tesddddt.fr', '09 83 38 34 31', '$2b$10$lgI3a7yMIJKwv/75NElQ7er0CLGuE47cDiN1.yd/hhNgpyL6Fta9u', '', 'no', 'user', 'offline', '2025-10-28 23:19:03.292'),
 (9, 'ff', 'dd', '', '^^^^^@glgl.fr', '09 83 38 34 31', '$2b$10$UANM.XgpcqBt/feibdQXNup/LhHO6IDjjWgYGscJaSDSQQzaBhKwS', '', 'no', 'user', 'offline', '2025-10-28 23:41:49.493'),
-(10, 'ff', 'dddd', '', 'tedddst@tesdt.fr', '06 51 45 55 44', '$2b$10$doi36HfPvUzC0N8xGbPcIuIjpunrPm79MxzFo0cZc0/jWAFjxjNWS', '', 'no', 'user', 'offline', '2025-10-28 23:46:35.007');
+(10, 'ff', 'dd', '', 'tedddst@tesdt.fr', '06 51 45 55 44', '$2b$10$doi36HfPvUzC0N8xGbPcIuIjpunrPm79MxzFo0cZc0/jWAFjxjNWS', '', 'no', 'user', 'offline', '2025-10-28 23:46:35.007'),
+(11, 'Sandrine', 'MION', '', 'smion89@hotmail.fr', '0681643957', '$2b$10$qkCxiyMiYEpH1a9JBa7SSOuSFN6Vzl0igjmTuVChHtwy3TxBKSzTa', '', 'no', 'user', 'offline', '2025-11-02 17:43:43.137');
 
 -- --------------------------------------------------------
 
@@ -330,11 +331,11 @@ INSERT INTO `user` (`user_id`, `user_firstname`, `user_lastname`, `user_pseudo`,
 
 DROP TABLE IF EXISTS `_prisma_migrations`;
 CREATE TABLE IF NOT EXISTS `_prisma_migrations` (
-  `id` varchar(36) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `checksum` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id` varchar(36) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `checksum` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `finished_at` datetime(3) DEFAULT NULL,
-  `migration_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `logs` text COLLATE utf8mb4_unicode_ci,
+  `migration_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `logs` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `rolled_back_at` datetime(3) DEFAULT NULL,
   `started_at` datetime(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
   `applied_steps_count` int UNSIGNED NOT NULL DEFAULT '0',
