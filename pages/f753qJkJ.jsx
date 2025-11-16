@@ -559,7 +559,7 @@ export default function AdminDashboard({ user }) {
               <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Actions rapides</h3>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <Button onClick={() => setCreateEventModalOpen(true)} className="flex flex-col items-center gap-2 h-auto py-6">
+                  <Button onClick={handleNewEvent} className="flex flex-col items-center gap-2 h-auto py-6">
                     <CalendarCog size={24} />
                     <span>Nouvel événement</span>
                   </Button>

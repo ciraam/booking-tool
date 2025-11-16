@@ -9,10 +9,10 @@ self.__BUILD_MANIFEST = {
   "lowPriorityFiles": [],
   "rootMainFiles": [],
   "pages": {
-    "/Zvx4T7e6": [
+    "/": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/Zvx4T7e6.js"
+      "static/chunks/pages/index.js"
     ],
     "/_app": [
       "static/chunks/webpack.js",
@@ -24,10 +24,10 @@ self.__BUILD_MANIFEST = {
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/f753qJkJ": [
+    "/reservations": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/f753qJkJ.js"
+      "static/chunks/pages/reservations.js"
     ]
   },
   "ampFirstPages": []

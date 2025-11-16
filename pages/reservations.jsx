@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { setBookings, removeBooking } from '../store/bookingSlice';
@@ -78,7 +78,7 @@ export default function Reservations({ user, isDisconnect }) {
     enabled: !isDisconnect,
   });
   !isDisconnect && isLoadingBooking? <div>Récupération des réservations...</div> : '';
-  const bookings = paginateData(bookingUserData, bookingsPage, itemsPerPage);
+  const bookings = bookingUserData ? paginateData(bookingUserData, bookingsPage, itemsPerPage) : '';
 
   // fetch et remplir le store si vide
   // useQuery({
@@ -121,10 +121,10 @@ export default function Reservations({ user, isDisconnect }) {
       });
       return;
     }
-    const booking = await fetchBooking();
-    if (booking?.data) {
+    const bookingD = await fetchBooking();
+    if (bookingD?.data) {
       // attendre 0,5 seconde avant de lancer la requête de l'événement
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await new Promise((resolve) => setTimeout(resolve, 600));
       fetchEvent();
     } else {
       toast({
@@ -252,13 +252,13 @@ export default function Reservations({ user, isDisconnect }) {
     );
   };
 
-  const upcomingBookings = Array.isArray(bookings)
+  const upcomingBookings = Array.isArray(bookings?.data)
   ? bookings.data.filter(b => b.booking_status === 'upcoming')
   : [];
-  const pastBookings = Array.isArray(bookings)
+  const pastBookings = Array.isArray(bookings?.data)
   ? bookings.data.filter(b => b.booking_status === 'past')
   : [];
-  const cancelledBookings = Array.isArray(bookings)
+  const cancelledBookings = Array.isArray(bookings?.data)
   ? bookings.data.filter(b => b.booking_status === 'cancelled')
   : [];
 
